@@ -16,79 +16,76 @@ export class TennisGame2 implements TennisGame {
     this.player2Name = player2Name;
   }
 
+  getScoreIfEqual(m_score) {
+    let score = ""
+    let memo = {
+      0 : 'Love-All', 
+      1 : 'Fifteen-All', 
+      2 : 'Thirty-All'
+    }
+    if (m_score in memo) {
+      return memo[m_score]      
+    }
+    return "Deuce"
+  }
+
+  getScoreIfHasZeroPoint(score) {
+    let point = [1,2,3]
+    let scores = ["Fifteen", "Thirtdy", "Forty"]
+    return scores[point.findIndex(idx => idx == score)] + "-Love"
+  }
+
+  getScoreIfSmallGap(point1, point2) {
+    let marks = [1,2,3]
+    let scores = ["Fifteen", "Thirty", "Forty"]
+    let res1 = scores[marks.findIndex(idx => idx == point1)]
+    let res2 = scores[marks.findIndex(idx => idx == point2)]
+    return res1 + "-" + res2
+  }
+
+  getScoreIfAdvantageOrWin(point1, point2) {
+    let score = ''
+    if (Math.min(point1, point2) >= 3) {
+      if (point1 > point2) {
+        score = 'Advantage player1'
+      } else {
+        score = 'Advantage player2'
+      }
+    } else {
+      if (point1 > point2) {
+        score = 'Win for player1'
+      } else {
+        score = 'Win for player2'
+      }
+    }
+    return score
+  }
+
+  getScoreIfDifferent(point1, point2) {
+    let score = ''
+    if (Math.max(point1, point2) < 4) {
+      if (point1 > point2) {
+        score = this.getScoreIfSmallGap(point1, point2)
+      } else {
+        score = this.getScoreIfSmallGap(point2, point1)
+      }
+    }
+    else {
+      score = this.getScoreIfAdvantageOrWin(point1, point2)
+    }
+    return score
+  }
   getScore(): string {
     let score: string = '';
-    if (this.P1point === this.P2point && this.P1point < 4) {
-      if (this.P1point === 0)
-        score = 'Love';
-      if (this.P1point === 1)
-        score = 'Fifteen';
-      if (this.P1point === 2)
-        score = 'Thirty';
-      score += '-All';
-    }
-    if (this.P1point === this.P2point && this.P1point >= 3)
-      score = 'Deuce';
-
-    if (this.P1point > 0 && this.P2point === 0) {
-      if (this.P1point === 1)
-        this.P1res = 'Fifteen';
-      if (this.P1point === 2)
-        this.P1res = 'Thirty';
-      if (this.P1point === 3)
-        this.P1res = 'Forty';
-
-      this.P2res = 'Love';
-      score = this.P1res + '-' + this.P2res;
-    }
-    if (this.P2point > 0 && this.P1point === 0) {
-      if (this.P2point === 1)
-        this.P2res = 'Fifteen';
-      if (this.P2point === 2)
-        this.P2res = 'Thirty';
-      if (this.P2point === 3)
-        this.P2res = 'Forty';
-
-      this.P1res = 'Love';
-      score = this.P1res + '-' + this.P2res;
+    if (this.P1point === this.P2point) {
+      score = this.getScoreIfEqual(this.P1point)
     }
 
-    if (this.P1point > this.P2point && this.P1point < 4) {
-      if (this.P1point === 2)
-        this.P1res = 'Thirty';
-      if (this.P1point === 3)
-        this.P1res = 'Forty';
-      if (this.P2point === 1)
-        this.P2res = 'Fifteen';
-      if (this.P2point === 2)
-        this.P2res = 'Thirty';
-      score = this.P1res + '-' + this.P2res;
-    }
-    if (this.P2point > this.P1point && this.P2point < 4) {
-      if (this.P2point === 2)
-        this.P2res = 'Thirty';
-      if (this.P2point === 3)
-        this.P2res = 'Forty';
-      if (this.P1point === 1)
-        this.P1res = 'Fifteen';
-      if (this.P1point === 2)
-        this.P1res = 'Thirty';
-      score = this.P1res + '-' + this.P2res;
-    }
-
-    if (this.P1point > this.P2point && this.P2point >= 3) {
-      score = 'Advantage player1';
-    }
-
-    if (this.P2point > this.P1point && this.P1point >= 3) {
-      score = 'Advantage player2';
-    }
-
-    if (this.P1point >= 4 && this.P2point >= 0 && (this.P1point - this.P2point) >= 2) {
-      score = 'Win for player1';
-    }
-    if (this.P2point >= 4 && this.P1point >= 0 && (this.P2point - this.P1point) >= 2) {
-      score = 'Win for player2';
+    if (this.P1point === 0 || this.P2point === 0) {
+      score = this.getScoreIfHasZeroPoint(this.P1point)
+    } 
+    else {
+      score = this.getScoreIfDifferent(this.P1point, this.P2point)
     }
     return score;
   }
