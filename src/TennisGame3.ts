@@ -12,18 +12,42 @@ export class TennisGame3 implements TennisGame {
     this.p2N = p2N;
   }
 
+  getScoreIfSmall(p1, p2) {
+    let score = ''
+    const p: string[] = ['Love', 'Fifteen', 'Thirty', 'Forty'];
+    let s = p[p1];
+    if (p1 == p2) {
+      score = s + '-All'
+    } else {
+      score = s + '-' + p[p2]
+    }
+    return score
+  }
+
+  isAdvantage(p1, p2) {
+    return ((p1 - p2) * (p1 - p2)) === 1
+  }
+
+  getScoreIfLarge(p1, p2) {
+    let score = ''
+    let s: string;
+    if (p1 == p2) {
+      score = 'Deuce'
+    } else {
+      s = p1 > p2 ? this.p1N : this.p2N;
+      score = this.isAdvantage(p1, p2) ? 'Advantage ' + s : 'Win for ' + s;
+    }
+    return score
+  }
   getScore(): string {
     let s: string;
+    let score = ''
     if (this.p1 < 4 && this.p2 < 4 && !(this.p1 + this.p2 === 6)) {
-      const p: string[] = ['Love', 'Fifteen', 'Thirty', 'Forty'];
-      s = p[this.p1];
-      return (this.p1 === this.p2) ? s + '-All' : s + '-' + p[this.p2];
+      score = this.getScoreIfSmall(this.p1, this.p2)
     } else {
-      if (this.p1 === this.p2)
-        return 'Deuce';
-      s = this.p1 > this.p2 ? this.p1N : this.p2N;
-      return (((this.p1 - this.p2) * (this.p1 - this.p2)) === 1) ? 'Advantage ' + s : 'Win for ' + s;
+      score = this.getScoreIfSmall(this.p1, this.p2)
     }
+    return score
   }
 
   wonPoint(playerName: string): void {
