@@ -19,52 +19,71 @@ export class TennisGame1 implements TennisGame {
       this.m_score2 += 1;
   }
 
+  getScoreIfEqual(m_score) {
+    let score = ""
+    let memo = {
+      0 : 'Love-All', 
+      1 : 'Fifteen-All', 
+      2 : 'Thirty-All'
+    }
+    if (m_score in memo) {
+      return memo[m_score]      
+    }
+    return "Deuce"
+  }
+
+  getScoreBasedOnTempScore(tempScore) {
+    let memoTempScore = {
+      0 : 'Love',
+      1 : 'Fifteen',
+      2 : 'Thirty',
+      3 : 'Forty'
+    }
+    return memoTempScore[tempScore]
+  }
+
+  getScoreBasedOnMinusResult(minusResult) {
+    if (minusResult < -1) {
+      minusResult = - Infinity
+    }
+    if (minusResult > 1) {
+      minusResult = Infinity
+    }
+    let memoMarks = [-Infinity, -1, 1, Infinity]
+    let memoScore = ["Win for player2", "Advantage player2",
+                     "Advantage player 1, Win for player1"]
+    return memoScore[memoMarks.findIndex(item => item == minusResult )]    
+  }
+  
+  getScoreIfDifferent(m_score1, m_score2) {
+    let score = ''
+    let tempScore = 0
+    if (m_score1 >= 4 || m_score2 >= 4) {
+      const minusResult: number = m_score1 - m_score2;
+      score = this.getScoreBasedOnMinusResult(minusResult)
+    }
+    else {
+      for (let i = 1; i < 3; i++) {
+        score += '-'
+        tempScore = m_score2
+        if (i == 1) {
+          score = ''
+          tempScore = m_score1
+        }
+        score += this.getScoreBasedOnTempScore(tempScore)
+      }
+    }
+    return score
+  }
+
   getScore(): string {
     let score: string = '';
     let tempScore: number = 0;
     if (this.m_score1 === this.m_score2) {
-      switch (this.m_score1) {
-        case 0:
-          score = 'Love-All';
-          break;
-        case 1:
-          score = 'Fifteen-All';
-          break;
-        case 2:
-          score = 'Thirty-All';
-          break;
-        default:
-          score = 'Deuce';
-          break;
-
-      }
-    }
-    else if (this.m_score1 >= 4 || this.m_score2 >= 4) {
-      const minusResult: number = this.m_score1 - this.m_score2;
-      if (minusResult === 1) score = 'Advantage player1';
-      else if (minusResult === -1) score = 'Advantage player2';
-      else if (minusResult >= 2) score = 'Win for player1';
-      else score = 'Win for player2';
+      score = this.getScoreIfEqual(this.m_score1)
     }
     else {
-      for (let i = 1; i < 3; i++) {
-        if (i === 1) tempScore = this.m_score1;
-        else { score += '-'; tempScore = this.m_score2; }
-        switch (tempScore) {
-          case 0:
-            score += 'Love';
-            break;
-          case 1:
-            score += 'Fifteen';
-            break;
-          case 2:
-            score += 'Thirty';
-            break;
-          case 3:
-            score += 'Forty';
-            break;
-        }
-      }
+      score = this.getScoreIfDifferent(this.m_score1, this.m_score2)
     }
     return score;
   }
