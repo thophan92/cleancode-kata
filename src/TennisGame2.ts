@@ -43,20 +43,25 @@ export class TennisGame2 implements TennisGame {
     return res1 + "-" + res2
   }
 
+  getScoreIfAdvatange(p1, p2) {
+    if (p1 > p2) {
+      return 'Advantage player1'
+    }
+    return 'Advantage player2'
+  }
+
+  getScoreIfWin(p1, p2) {
+    if (p1 > p2) {
+      return 'Win for player1'
+    }
+    return 'Win for player2'
+  }
   getScoreIfAdvantageOrWin(point1, point2) {
     let score = ''
     if (Math.min(point1, point2) >= 3) {
-      if (point1 > point2) {
-        score = 'Advantage player1'
-      } else {
-        score = 'Advantage player2'
-      }
+      score = this.getScoreIfAdvatange(point1, point2)
     } else {
-      if (point1 > point2) {
-        score = 'Win for player1'
-      } else {
-        score = 'Win for player2'
-      }
+      score = this.getScoreIfWin(point1, point2)
     }
     return score
   }
