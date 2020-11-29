@@ -2,8 +2,8 @@ import { TennisGame } from './TennisGame';
 
 
 export class TennisGame1 implements TennisGame {
-  private m_score1: number = 0;
-  private m_score2: number = 0;
+  private player1Score: number = 0;
+  private player2Score: number = 0;
   private player1Name: string;
   private player2Name: string;
 
@@ -14,9 +14,9 @@ export class TennisGame1 implements TennisGame {
 
   wonPoint(playerName: string): void {
     if (playerName === 'player1')
-      this.m_score1 += 1;
+      this.player1Score += 1;
     else
-      this.m_score2 += 1;
+      this.player2Score += 1;
   }
 
   getScoreIfEqual(m_score) {
@@ -55,20 +55,20 @@ export class TennisGame1 implements TennisGame {
     return memoScore[memoMarks.findIndex(item => item == minusResult )]    
   }
   
-  getScoreIfDifferent(m_score1, m_score2) {
+  getScoreIfDifferent(player1Score, player2Score) {
     let score = ''
     let tempScore = 0
-    if (m_score1 >= 4 || m_score2 >= 4) {
-      const minusResult: number = m_score1 - m_score2;
+    if (player1Score >= 4 || player2Score >= 4) {
+      const minusResult: number = player1Score - player2Score;
       score = this.getScoreBasedOnMinusResult(minusResult)
     }
     else {
       for (let i = 1; i < 3; i++) {
         score += '-'
-        tempScore = m_score2
+        tempScore = player2Score
         if (i == 1) {
           score = ''
-          tempScore = m_score1
+          tempScore = player1Score
         }
         score += this.getScoreBasedOnTempScore(tempScore)
       }
@@ -79,11 +79,11 @@ export class TennisGame1 implements TennisGame {
   getScore(): string {
     let score: string = '';
     let tempScore: number = 0;
-    if (this.m_score1 === this.m_score2) {
-      score = this.getScoreIfEqual(this.m_score1)
+    if (this.player1Score === this.player2Score) {
+      score = this.getScoreIfEqual(this.player1Score)
     }
     else {
-      score = this.getScoreIfDifferent(this.m_score1, this.m_score2)
+      score = this.getScoreIfDifferent(this.player1Score, this.player2Score)
     }
     return score;
   }

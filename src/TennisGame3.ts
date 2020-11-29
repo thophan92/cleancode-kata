@@ -2,59 +2,59 @@ import { TennisGame } from './TennisGame';
 
 
 export class TennisGame3 implements TennisGame {
-  private p2: number = 0;
-  private p1: number = 0;
-  private p1N: string;
-  private p2N: string;
+  private point2: number = 0;
+  private point1: number = 0;
+  private player1Name: string;
+  private player2Name: string;
 
-  constructor(p1N: string, p2N: string) {
-    this.p1N = p1N;
-    this.p2N = p2N;
+  constructor(player1Name: string, player2Name: string) {
+    this.player1Name = player1Name;
+    this.player2Name = player2Name;
   }
 
-  getScoreIfSmall(p1, p2) {
+  getScoreIfSmall(point1, point2) {
     let score = ''
     const p: string[] = ['Love', 'Fifteen', 'Thirty', 'Forty'];
-    let s = p[p1];
-    if (p1 == p2) {
+    let s = p[point1];
+    if (point1 == point2) {
       score = s + '-All'
     } else {
-      score = s + '-' + p[p2]
+      score = s + '-' + p[point2]
     }
     return score
   }
 
-  isAdvantage(p1, p2) {
-    return ((p1 - p2) * (p1 - p2)) === 1
+  isAdvantage(point1, point2) {
+    return ((point1 - point2) * (point1 - point2)) === 1
   }
 
-  getScoreIfLarge(p1, p2) {
+  getScoreIfLarge(point1, point2) {
     let score = ''
     let s: string;
-    if (p1 == p2) {
+    if (point1 == point2) {
       score = 'Deuce'
     } else {
-      s = p1 > p2 ? this.p1N : this.p2N;
-      score = this.isAdvantage(p1, p2) ? 'Advantage ' + s : 'Win for ' + s;
+      s = point1 > point2 ? this.player1Name : this.player2Name;
+      score = this.isAdvantage(point1, point2) ? 'Advantage ' + s : 'Win for ' + s;
     }
     return score
   }
   getScore(): string {
     let s: string;
     let score = ''
-    if (this.p1 < 4 && this.p2 < 4 && !(this.p1 + this.p2 === 6)) {
-      score = this.getScoreIfSmall(this.p1, this.p2)
+    if (this.point1 < 4 && this.point2 < 4 && !(this.point1 + this.point2 === 6)) {
+      score = this.getScoreIfSmall(this.point1, this.point2)
     } else {
-      score = this.getScoreIfSmall(this.p1, this.p2)
+      score = this.getScoreIfSmall(this.point1, this.point2)
     }
     return score
   }
 
   wonPoint(playerName: string): void {
     if (playerName === 'player1')
-      this.p1 += 1;
+      this.point1 += 1;
     else
-      this.p2 += 1;
+      this.point2 += 1;
 
   }
 }

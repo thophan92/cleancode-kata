@@ -2,11 +2,11 @@ import { TennisGame } from './TennisGame';
 
 
 export class TennisGame2 implements TennisGame {
-  P1point: number = 0;
-  P2point: number = 0;
+  player1Point: number = 0;
+  player2Point: number = 0;
 
-  P1res: string = '';
-  P2res: string = '';
+  player1Result: string = '';
+  player2Result: string = '';
 
   private player1Name: string;
   private player2Name: string;
@@ -16,15 +16,14 @@ export class TennisGame2 implements TennisGame {
     this.player2Name = player2Name;
   }
 
-  getScoreIfEqual(m_score) {
-    let score = ""
+  getScoreIfEqual(playerScore) {
     let memo = {
       0 : 'Love-All', 
       1 : 'Fifteen-All', 
       2 : 'Thirty-All'
     }
-    if (m_score in memo) {
-      return memo[m_score]      
+    if (playerScore in memo) {
+      return memo[playerScore]      
     }
     return "Deuce"
   }
@@ -38,20 +37,20 @@ export class TennisGame2 implements TennisGame {
   getScoreIfSmallGap(point1, point2) {
     let marks = [1,2,3]
     let scores = ["Fifteen", "Thirty", "Forty"]
-    let res1 = scores[marks.findIndex(idx => idx == point1)]
-    let res2 = scores[marks.findIndex(idx => idx == point2)]
-    return res1 + "-" + res2
+    let result1 = scores[marks.findIndex(idx => idx == point1)]
+    let result2 = scores[marks.findIndex(idx => idx == point2)]
+    return result1 + "-" + result2
   }
 
-  getScoreIfAdvatange(p1, p2) {
-    if (p1 > p2) {
+  getScoreIfAdvatange(point1, point2) {
+    if (point1 > point2) {
       return 'Advantage player1'
     }
     return 'Advantage player2'
   }
 
-  getScoreIfWin(p1, p2) {
-    if (p1 > p2) {
+  getScoreIfWin(point1, point2) {
+    if (point1 > point2) {
       return 'Win for player1'
     }
     return 'Win for player2'
@@ -82,47 +81,47 @@ export class TennisGame2 implements TennisGame {
   }
   getScore(): string {
     let score: string = '';
-    if (this.P1point === this.P2point) {
-      score = this.getScoreIfEqual(this.P1point)
+    if (this.player1Point === this.player2Point) {
+      score = this.getScoreIfEqual(this.player1Point)
     }
 
-    if (this.P1point === 0 || this.P2point === 0) {
-      score = this.getScoreIfHasZeroPoint(this.P1point)
+    if (this.player1Point === 0 || this.player2Point === 0) {
+      score = this.getScoreIfHasZeroPoint(this.player1Point)
     } 
     else {
-      score = this.getScoreIfDifferent(this.P1point, this.P2point)
+      score = this.getScoreIfDifferent(this.player1Point, this.player2Point)
     }
     return score;
   }
 
-  SetP1Score(score: number): void {
+  SetPlayer1Score(score: number): void {
 
     for (let i = 0; i < score; i++) {
-      this.P1Score();
+      this.Player1Score();
     }
 
   }
 
-  SetP2Score(score: number): void {
+  SetPlayer2Score(score: number): void {
 
     for (let i = 0; i < score; i++) {
-      this.P2Score();
+      this.Player2Score();
     }
 
   }
 
-  P1Score(): void {
-    this.P1point++;
+  Player1Score(): void {
+    this.player1Point++;
   }
 
-  P2Score(): void {
-    this.P2point++;
+  Player2Score(): void {
+    this.player2Point++;
   }
 
   wonPoint(player: string): void {
     if (player === 'player1')
-      this.P1Score();
+      this.Player1Score();
     else
-      this.P2Score();
+      this.Player2Score();
   }
 }
